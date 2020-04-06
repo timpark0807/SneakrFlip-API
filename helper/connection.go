@@ -14,7 +14,7 @@ import (
 // ConnectDB Comment
 func ConnectDB() *mongo.Collection {
 
-	var URI = "mongodb+srv://admin:admin@cluster0-4qevm.mongodb.net/test?retryWrites=true&w=majority"
+	var URI = "ENTERURI"
 
 	// Set client options
 	clientOptions := options.Client().ApplyURI(URI)
