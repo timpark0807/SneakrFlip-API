@@ -1,7 +1,7 @@
 package model
 
 // Person is your comment
-type Person struct {
+type Tenant struct {
 	SocialSecurity string `json:"ss,omitempty" bson:"ss,omitempty"`
 	FirstName      string `json:"firstname,omitempty" bson:"firstname,omitempty"`
 	LastName       string `json:"lastname,omitempty" bson:"lastname,omitempty"`
