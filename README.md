@@ -21,3 +21,13 @@ __/tenant/<id>__
 - `GET`: Get a tenant
 - `PUT`: Update a tenant
 - `DELETE`: Delete a tenant
+
+## TODO 
+-[x] Define document models
+-[x] Map out API Endpoints
+-[x] Implement CRUD functionality
+-[ ] Authenticate user HTTP requests 
+-[ ] Write tests for APIS
+-[ ] Write documentation
+-[ ] Organize code in packages
+-[ ] Build a deployment process
