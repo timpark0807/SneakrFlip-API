@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/timpark0807/restapi/helper"
 	"github.com/timpark0807/restapi/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -19,7 +20,14 @@ func ListProperties(w http.ResponseWriter, r *http.Request) {
 func CreateProperty(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+
 	var property model.Property
+	property.CreatedBy = bearerToken.Email
+
+	if err != nil {
+		return
+	}
 
 	// decode the post body request
 	_ = json.NewDecoder(r.Body).Decode(&property)
@@ -42,15 +50,24 @@ func CreateProperty(w http.ResponseWriter, r *http.Request) {
 func GetProperty(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+	if err != nil {
+		return
+	}
+
 	var property model.Property
 	var params = mux.Vars(r)
 	collection := helper.ConnectDB()
-
-	filter := bson.M{"id": params["id"]}
-	err := collection.FindOne(context.TODO(), filter).Decode(&property)
+	objID, _ := primitive.ObjectIDFromHex(params["_id"])
+	filter := bson.M{"_id": objID}
+	err = collection.FindOne(context.TODO(), filter).Decode(&property)
 
 	if err != nil {
 		helper.GetError(err, w)
+		return
+	}
+
+	if bearerToken.Email != property.CreatedBy {
 		return
 	}
 
@@ -66,7 +83,7 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 
 	collection := helper.ConnectDB()
 
-	filter := bson.M{"id": params["id"]}
+	filter := bson.M{"_id": params["_id"]}
 
 	_ = json.NewDecoder(r.Body).Decode(&property)
 
@@ -99,7 +116,7 @@ func DeleteProperty(w http.ResponseWriter, r *http.Request) {
 	// connect db
 	collection := helper.ConnectDB()
 
-	filter := bson.M{"id": params["id"]}
+	filter := bson.M{"_id": params["_id"]}
 
 	deleteResult, err := collection.DeleteOne(context.TODO(), filter)
 
