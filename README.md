@@ -23,11 +23,11 @@ __/tenant/<id>__
 - `DELETE`: Delete a tenant
 
 ## TODO 
--[x] Define document models
--[x] Map out API Endpoints
--[x] Implement CRUD functionality
--[ ] Authenticate user HTTP requests 
--[ ] Write tests for APIS
--[ ] Write documentation
--[ ] Organize code in packages
--[ ] Build a deployment process
+- [x] Define document models
+- [x] Map out API Endpoints
+- [x] Implement CRUD functionality
+- [ ] Authenticate user HTTP requests 
+- [ ] Write tests for APIS
+- [ ] Write documentation
+- [ ] Organize code in packages
+- [ ] Build a deployment process
