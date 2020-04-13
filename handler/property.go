@@ -21,23 +21,20 @@ func ListProperties(w http.ResponseWriter, r *http.Request) {
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 
-	var results []*model.Property
-	// var params = mux.Vars(r)
-	// filter := bson.M{"createdby": params["email"]}
-
 	collection := helper.ConnectDB()
 	filter := bson.M{"createdby": bearerToken.Email}
 	findOptions := options.Find()
-	findOptions.SetLimit(10)
 
 	cur, err := collection.Find(context.TODO(), filter, findOptions)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var results []*model.Property
+
 	for cur.Next(context.TODO()) {
 
-		// create a value into which the single document can be decoded
 		var property model.Property
 		err := cur.Decode(&property)
 		if err != nil {
@@ -51,7 +48,6 @@ func ListProperties(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	// Close the cursor once finished
 	cur.Close(context.TODO())
 
 	json.NewEncoder(w).Encode(results)
@@ -125,7 +121,8 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 
 	collection := helper.ConnectDB()
 
-	filter := bson.M{"_id": params["_id"]}
+	objID, _ := primitive.ObjectIDFromHex(params["_id"])
+	filter := bson.M{"_id": objID}
 
 	_ = json.NewDecoder(r.Body).Decode(&property)
 
@@ -159,8 +156,8 @@ func DeleteProperty(w http.ResponseWriter, r *http.Request) {
 	// connect db
 	collection := helper.ConnectDB()
 
-	filter := bson.M{"_id": params["_id"]}
-
+	objID, _ := primitive.ObjectIDFromHex(params["_id"])
+	filter := bson.M{"_id": objID}
 	deleteResult, err := collection.DeleteOne(context.TODO(), filter)
 
 	if err != nil {
