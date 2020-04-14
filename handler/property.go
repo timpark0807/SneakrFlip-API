@@ -115,9 +115,18 @@ func GetProperty(w http.ResponseWriter, r *http.Request) {
 // UpdateProperty Comment
 func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
 	var property model.Property
 	var params = mux.Vars(r)
+
+	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+	if err != nil {
+		return
+	}
+
+	check := deleteHelper(params["_id"])
+	if check.CreatedBy != bearerToken.Email {
+		return
+	}
 
 	collection := helper.ConnectDB()
 
@@ -136,7 +145,7 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 			"createdby": property.CreatedBy},
 	}
 
-	err := collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&property)
+	err = collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&property)
 
 	if err != nil {
 		helper.GetError(err, w)
@@ -151,18 +160,36 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 func DeleteProperty(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+	if err != nil {
+		return
+	}
+
 	var params = mux.Vars(r)
 
-	// connect db
+	property := deleteHelper(params["_id"])
+	if property.CreatedBy != bearerToken.Email {
+		return
+	}
+
 	collection := helper.ConnectDB()
 
 	objID, _ := primitive.ObjectIDFromHex(params["_id"])
 	filter := bson.M{"_id": objID}
 	deleteResult, err := collection.DeleteOne(context.TODO(), filter)
-
 	if err != nil {
 		helper.GetError(err, w)
 		return
 	}
+
 	json.NewEncoder(w).Encode(deleteResult)
+}
+
+func deleteHelper(_id string) model.Property {
+	objID, _ := primitive.ObjectIDFromHex(_id)
+	filter := bson.M{"_id": objID}
+	var property model.Property
+	collection := helper.ConnectDB()
+	collection.FindOne(context.TODO(), filter).Decode(&property)
+	return property
 }
