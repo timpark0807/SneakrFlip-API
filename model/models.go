@@ -2,7 +2,7 @@ package model
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-// Person is your comment
+// Tenant is your comment
 type Tenant struct {
 	SocialSecurity string `json:"ss,omitempty" bson:"ss,omitempty"`
 	FirstName      string `json:"firstname,omitempty" bson:"firstname,omitempty"`
@@ -20,7 +20,7 @@ type Property struct {
 	CreatedBy string             `json:"createdby,omitempty" bson:"createdby,omitempty"`
 }
 
-// Property is yourcomment.
+// Item is yourcomment.
 type Item struct {
 	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Category    string             `json:"category,omitempty" bson:"category,omitempty"`
@@ -28,10 +28,16 @@ type Item struct {
 	Description string             `json:"description,omitempty" bson:"description,omitempty"`
 	Size        string             `json:"size,omitempty" bson:"size,omitempty"`
 	Condition   string             `json:"condition,omitempty" bson:"condition,omitempty"`
+	Sold        bool               `json:"sold,false" bson:"sold,false"`
 	CreatedBy   string             `json:"createdby,omitempty" bson:"createdby,omitempty"`
 }
 
-// Bearer is your comment
+// UpdateSoldStatus is your comment
+func (i *Item) UpdateSoldStatus() {
+	i.Sold = !i.Sold
+}
+
+// BearerToken is your comment
 type BearerToken struct {
 	IssuedTo         string `json:"issued_to,omitempty" bson:"issued_to,omitempty"`
 	Audience         string `json:"audience,omitempty" bson:"audience,omitempty"`
