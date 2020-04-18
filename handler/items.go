@@ -141,7 +141,7 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var tempItem model.Item 
+	var tempItem model.Item
 	_ = json.NewDecoder(r.Body).Decode(&tempItem)
 
 	item := getItemHelper(tempItem.ID.Hex())
@@ -171,4 +171,45 @@ func getItemHelper(_id string) model.Item {
 	collection := helper.ConnectDB()
 	collection.FindOne(context.TODO(), filter).Decode(&item)
 	return item
+}
+
+func UpdateItem(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var item model.Item
+	_ = json.NewDecoder(r.Body).Decode(&item)
+
+	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+	if err != nil {
+		return
+	}
+
+	if item.CreatedBy != bearerToken.Email {
+		return
+	}
+
+	collection := helper.ConnectDB()
+
+	filter := bson.M{"_id": item.ID}
+
+	update := bson.M{
+		"$set": bson.M{
+			"_id":         item.ID,
+			"category":    item.Category,
+			"brand":       item.Brand,
+			"description": item.Description,
+			"size":        item.Size,
+			"condition":   item.Condition,
+			"sold":        item.Sold,
+			"createdby":   item.CreatedBy},
+	}
+
+	err = collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&item)
+
+	if err != nil {
+		helper.GetError(err, w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(item)
+
 }
