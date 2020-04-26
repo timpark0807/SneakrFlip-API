@@ -2,24 +2,6 @@ package model
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-// Tenant is your comment
-type Tenant struct {
-	SocialSecurity string `json:"ss,omitempty" bson:"ss,omitempty"`
-	FirstName      string `json:"firstname,omitempty" bson:"firstname,omitempty"`
-	LastName       string `json:"lastname,omitempty" bson:"lastname,omitempty"`
-	CreatedBy      string `json:"createdby,omitempty" bson:"createdby,omitempty"`
-}
-
-// Property is yourcomment.
-type Property struct {
-	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Address   string             `json:"address,omitempty" bson:"address,omitempty"`
-	Zipcode   string             `json:"zipcode,omitempty" bson:"zipcode,omitempty"`
-	Price     string             `json:"price,omitempty" bson:"price,omitempty"`
-	Category  string             `json:"category,omitempty" bson:"category,omitempty"`
-	CreatedBy string             `json:"createdby,omitempty" bson:"createdby,omitempty"`
-}
-
 // Item is yourcomment.
 type Item struct {
 	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`

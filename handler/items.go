@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -21,6 +20,10 @@ func ListItems(w http.ResponseWriter, r *http.Request) {
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 
+	if err != nil {
+		return
+	}
+
 	collection := helper.ConnectDB()
 	filter := bson.M{"createdby": bearerToken.Email}
 	findOptions := options.Find()
@@ -37,7 +40,6 @@ func ListItems(w http.ResponseWriter, r *http.Request) {
 
 		var item model.Item
 		err := cur.Decode(&item)
-
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -68,9 +70,7 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_ = json.NewDecoder(r.Body).Decode(&item)
-
 	collection := helper.ConnectDB()
-
 	result, err := collection.InsertOne(context.TODO(), item)
 
 	if err != nil {
@@ -92,10 +92,6 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 	var params = mux.Vars(r)
 	item := getItemHelper(params["_id"])
 
-	if err != nil {
-		return
-	}
-
 	if bearerToken.Email != item.CreatedBy {
 		return
 	}
@@ -108,6 +104,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
+
 	if err != nil {
 		return
 	}
@@ -135,7 +132,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 // UpdateItemStatus Comment
 func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Println(r.Header.Get("Authorization"))
+
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 	if err != nil {
 		return
@@ -143,14 +140,13 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 
 	var tempItem model.Item
 	_ = json.NewDecoder(r.Body).Decode(&tempItem)
-
 	item := getItemHelper(tempItem.ID.Hex())
+
 	if item.CreatedBy != bearerToken.Email {
 		return
 	}
 
 	filter := bson.M{"_id": item.ID}
-
 	collection := helper.ConnectDB()
 	update := bson.M{
 		"$set": bson.M{
@@ -164,33 +160,19 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
-func getItemHelper(_id string) model.Item {
-	objID, _ := primitive.ObjectIDFromHex(_id)
-	filter := bson.M{"_id": objID}
-	var item model.Item
-	collection := helper.ConnectDB()
-	collection.FindOne(context.TODO(), filter).Decode(&item)
-	return item
-}
-
 func UpdateItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var item model.Item
 	_ = json.NewDecoder(r.Body).Decode(&item)
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
-	if err != nil {
-		return
-	}
 
-	if item.CreatedBy != bearerToken.Email {
+	if item.CreatedBy != bearerToken.Email || err != nil {
 		return
 	}
 
 	collection := helper.ConnectDB()
-
 	filter := bson.M{"_id": item.ID}
-
 	update := bson.M{
 		"$set": bson.M{
 			"_id":         item.ID,
@@ -212,4 +194,13 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(item)
 
+}
+
+func getItemHelper(_id string) model.Item {
+	objID, _ := primitive.ObjectIDFromHex(_id)
+	filter := bson.M{"_id": objID}
+	var item model.Item
+	collection := helper.ConnectDB()
+	collection.FindOne(context.TODO(), filter).Decode(&item)
+	return item
 }

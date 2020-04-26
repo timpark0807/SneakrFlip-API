@@ -3,7 +3,6 @@ package helper
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -30,7 +29,6 @@ func CheckToken(token string) (model.BearerToken, error) {
 	_ = json.NewDecoder(resp.Body).Decode(&bearerToken)
 
 	if len(bearerToken.Error) != 0 {
-		fmt.Println(bearerToken.Error)
 		return bearerToken, errors.New(bearerToken.ErrorDescription)
 	}
 
