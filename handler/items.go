@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/timpark0807/restapi/helper"
@@ -64,6 +65,7 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 	var item model.Item
 	item.CreatedBy = bearerToken.Email
+	item.CreatedOn = time.Now().Format("2006-01-02 15:04:05")
 
 	if err != nil {
 		return

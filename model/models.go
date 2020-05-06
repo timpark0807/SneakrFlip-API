@@ -12,6 +12,7 @@ type Item struct {
 	Condition   string             `json:"condition,omitempty" bson:"condition,omitempty"`
 	Sold        bool               `json:"sold,false" bson:"sold,false"`
 	CreatedBy   string             `json:"createdby,omitempty" bson:"createdby,omitempty"`
+	CreatedOn   string             `json:"createdon,omitempty" bson:"createdon,omitempty"`
 }
 
 // UpdateSoldStatus is your comment
