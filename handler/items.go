@@ -152,7 +152,8 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 	collection := helper.ConnectDB()
 	update := bson.M{
 		"$set": bson.M{
-			"sold": !item.Sold,
+			"sold":      !item.Sold,
+			"updatedon": time.Now().Format("2006-01-02 15:04:05"),
 		},
 	}
 
@@ -184,7 +185,8 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 			"size":        item.Size,
 			"condition":   item.Condition,
 			"sold":        item.Sold,
-			"createdby":   item.CreatedBy},
+			"createdby":   item.CreatedBy,
+			"updatedon":   time.Now().Format("2006-01-02 15:04:05")},
 	}
 
 	err = collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&item)
