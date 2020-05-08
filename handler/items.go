@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/timpark0807/restapi/helper"
-	"github.com/timpark0807/restapi/model"
+	"github.com/timpark0807/PM-rest-api/helper"
+	"github.com/timpark0807/PM-rest-api/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"

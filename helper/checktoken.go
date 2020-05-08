@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/timpark0807/restapi/model"
+	"github.com/timpark0807/PM-rest-api/model"
 )
 
 // CheckToken Comment

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/timpark0807/restapi/handler"
+	"github.com/timpark0807/PM-rest-api/handler"
 )
 
 func main() {
