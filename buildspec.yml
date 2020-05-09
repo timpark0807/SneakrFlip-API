@@ -1,32 +1,43 @@
 version: 0.2
+
 env:
     variables:
-      # This S3 bucket will be used to store the packaged Lambda deployment bundle.
-      # Make sure to provide a valid S3 bucket name (it must exist already).
-      # The AWS CodeBuild IAM role must allow write access to it.
-      S3_BUCKET: "sneakrflip.com"
-      PACKAGE: "github.com/timpark0807/PM-rest-api"
+        PACKAGE: "github.com/timpark0807/PM-rest-api"
 
-      
 phases:
 
     install: 
         commands:
+
+            # AWS Codebuild Go images use /go for the $GOPATH 
+            # Copy our application source code into that directory structure.
             - mkdir -p "/go/src/$(dirname ${PACKAGE})"
             - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}" 
+
+            # Install golint package 
             - go get -u golang.org/x/lint/golint
 
     pre_build: 
         commands:
+
+            # Make sure we are in the project directory of our GOPATH
             - cd "/go/src/${PACKAGE}"
+
+            # Fetch all project dependencies
             - go get ./...
+
+            # Ensure code passes all lint tests 
             - golint -set_exit_status
+
+            # Check the Go code for common problems with 'go vet'
+            - go vet .
 
     build:
         commands:
+            # Build our application 
             - go build main.go
 
 artifacts:
 
     files:
-        - "**/*"
+        - main.go
