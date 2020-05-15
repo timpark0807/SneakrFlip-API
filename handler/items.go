@@ -15,6 +15,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+func returnCode403(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusForbidden)
+	w.Write([]byte("403 HTTP status code returned!"))
+}
+
 // ListItems comment
 func ListItems(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -22,6 +27,7 @@ func ListItems(w http.ResponseWriter, r *http.Request) {
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 
 	if err != nil {
+		returnCode403(w, r)
 		return
 	}
 
@@ -68,6 +74,7 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 	item.CreatedOn = time.Now().Format("2006-01-02 15:04:05")
 
 	if err != nil {
+		returnCode403(w, r)
 		return
 	}
 
@@ -88,6 +95,7 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 	if err != nil {
+		returnCode403(w, r)
 		return
 	}
 
@@ -108,6 +116,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 
 	if err != nil {
+		returnCode403(w, r)
 		return
 	}
 
@@ -137,6 +146,7 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 	if err != nil {
+		returnCode403(w, r)
 		return
 	}
 
@@ -171,6 +181,7 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 	bearerToken, err := helper.CheckToken(r.Header.Get("Authorization"))
 
 	if item.CreatedBy != bearerToken.Email || err != nil {
+		returnCode403(w, r)
 		return
 	}
 
