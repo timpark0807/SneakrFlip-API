@@ -103,6 +103,7 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 	item := getItemHelper(params["_id"])
 
 	if bearerToken.Email != item.CreatedBy {
+		returnCode403(w, r)
 		return
 	}
 
@@ -124,6 +125,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 
 	item := getItemHelper(params["_id"])
 	if item.CreatedBy != bearerToken.Email {
+		returnCode403(w, r)
 		return
 	}
 
@@ -155,6 +157,7 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 	item := getItemHelper(tempItem.ID.Hex())
 
 	if item.CreatedBy != bearerToken.Email {
+		returnCode403(w, r)
 		return
 	}
 
