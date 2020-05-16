@@ -17,7 +17,10 @@ import (
 
 func returnCode403(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusForbidden)
-	w.Write([]byte("403 HTTP status code returned!"))
+}
+
+func returnCode500(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
 }
 
 // ListItems comment
@@ -83,9 +86,11 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 	result, err := collection.InsertOne(context.TODO(), item)
 
 	if err != nil {
+		returnCode500(w, r)
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(result)
 }
 
@@ -136,6 +141,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 	deleteResult, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
 		helper.GetError(err, w)
+		returnCode500(w, r)
 		return
 	}
 
@@ -172,7 +178,6 @@ func UpdateItemStatus(w http.ResponseWriter, r *http.Request) {
 
 	result, err := collection.UpdateOne(context.TODO(), filter, update)
 
-	item.UpdateSoldStatus()
 	json.NewEncoder(w).Encode(result)
 }
 
@@ -207,6 +212,7 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		helper.GetError(err, w)
+		returnCode500(w, r)
 		return
 	}
 
