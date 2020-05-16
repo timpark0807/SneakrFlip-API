@@ -16,11 +16,6 @@ type Item struct {
 	UpdatedOn   string             `json:"updatedon,omitempty" bson:"updatedon,omitempty"`
 }
 
-// UpdateSoldStatus is your comment
-func (i *Item) UpdateSoldStatus() {
-	i.Sold = !i.Sold
-}
-
 // BearerToken is your comment
 type BearerToken struct {
 	IssuedTo         string `json:"issued_to,omitempty" bson:"issued_to,omitempty"`
