@@ -95,11 +95,11 @@ Updates the "sold" status of an item based on the id.
 |--|--|--|
 |ID|string|The item's unique identifier.|
 
+---
 
 ## Objects
 
 ### Item
-**Description:**
 An item in the user's inventory. 
 
 **Attributes:**
