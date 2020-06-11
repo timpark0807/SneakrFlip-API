@@ -23,7 +23,8 @@ Retrieves an item with a given ID.
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
-\
+
+---
 
 ### List items for a user
 Returns all items created by a user.
@@ -33,7 +34,8 @@ Returns all items created by a user.
 
 **Parameters:** 
 None 
-\
+
+---
 
 ### Create an item
 Creates a new item for a user. 
@@ -49,7 +51,8 @@ Creates a new item for a user.
 |description|string|A brief description of the item.|
 |condition|string|Label the item condition as Deadstock, Very Near Deadstock, or Used.|
 |sold|boolean|Whether the item is sold. Default to unsold.|
-\
+
+---
 
 ### Update an item
 Updates an existing item in the inventory of a user. Any parameter values not specified will not be modified. 
@@ -65,7 +68,8 @@ Updates an existing item in the inventory of a user. Any parameter values not sp
 |description|string|A brief description of the item.|
 |condition|string|Label the item condition as Deadstock, Very Near Deadstock, or Used.|
 |sold|boolean|Whether the item is sold. Default to unsold.|
-\
+
+---
 
 ### Delete an item
 Deletes an item from a user's inventory. 
@@ -77,7 +81,8 @@ Deletes an item from a user's inventory.
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
-\
+
+---
 
 ### Update Status of an Item
 Updates the "sold" status of an item based on the id. 
@@ -89,6 +94,7 @@ Updates the "sold" status of an item based on the id.
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
+
 
 ## Objects
 
