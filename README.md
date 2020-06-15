@@ -1,7 +1,7 @@
 # SneakrFlip API Documentation
 The SneakrFlip API is a RESTful service. The API uses standard HTTP response codes, authentication, and verbs. 
 
-The base URL for each request is `https://www.sneakrflip.com/`. 
+The base URL for each request is `https://api.sneakrflip.com/`. 
 
 ## Authorization
 API requests are authorized using the JWT token obtained from a successful oAuth login. This token must be passed in the header of each request. 
@@ -10,38 +10,36 @@ The JWT token will contain information about the current user. The backend will 
 
 A successful request will return a `200 Successful` response. An unauthorized request will return a `403	Forbidden` response. 
 
-## API Endpoints
+# API Endpoints
 
-### Retrieve an item.
+## Retrieve an item.
 Retrieves an item with a given ID. 
 
 **Endpoint:**
 
-`GET`  `https://www.sneakrflip.com/api/item/:id`
+`GET`  `https://api.sneakrflip.com/api/item/:id`
 
 **Parameters:** 
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
 
----
 
-### List items for a user
+## List items for a user
 Returns all items created by a user.
 
 **Endpoint:**
-`GET` `https://www.sneakrflip.com/api/item`
+`GET` `https://api.sneakrflip.com/api/item`
 
 **Parameters:** 
 None 
 
----
 
-### Create an item
+## Create an item
 Creates a new item for a user. 
 
 **Endpoint:**
-`POST` `https://www.sneakrflip.com/api/item`
+`POST` `https://api.sneakrflip.com/api/item`
 
 **Parameters:** 
 |Name  | Type  | Description |
@@ -52,13 +50,12 @@ Creates a new item for a user.
 |condition|string|Label the item condition as Deadstock, Very Near Deadstock, or Used.|
 |sold|boolean|Whether the item is sold. Default to unsold.|
 
----
 
-### Update an item
+## Update an item
 Updates an existing item in the inventory of a user. Any parameter values not specified will not be modified. 
 
 **Endpoint:**
-`PUT` `https://www.sneakrflip.com/api/item`
+`PUT` `https://api.sneakrflip.com/api/item`
 
 **Parameters:** 
 |Name  | Type  | Description |
@@ -69,37 +66,35 @@ Updates an existing item in the inventory of a user. Any parameter values not sp
 |condition|string|Label the item condition as Deadstock, Very Near Deadstock, or Used.|
 |sold|boolean|Whether the item is sold. Default to unsold.|
 
----
 
-### Delete an item
+## Delete an item
 Deletes an item from a user's inventory. 
 
 **Endpoint:**
-`DELETE` `https://www.sneakrflip.com/api/item/:id`
+`DELETE` `https://api.sneakrflip.com/api/item/:id`
 
 **Parameters:** 
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
 
----
 
-### Update Status of an Item
+## Update Status of an Item
 Updates the "sold" status of an item based on the id. 
 
 **Endpoint:**
-`DELETE` `https://www.sneakrflip.com/api/item/:id`
+`DELETE` `https://api.sneakrflip.com/api/item/:id`
 
 **Parameters:** 
 |Name  | Type  | Description |
 |--|--|--|
 |ID|string|The item's unique identifier.|
 
----
 
-## Objects
 
-### Item
+# Objects
+
+## Item
 An item in the user's inventory. 
 
 **Attributes:**
